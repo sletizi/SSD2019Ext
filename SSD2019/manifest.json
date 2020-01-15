@@ -1,0 +1,14 @@
+{
+  "name": "SSD2019",
+  "short_name": "SSD2019",
+  "lang": "it-IT",
+  "start_url": "index.html",
+  "display": "fullscreen",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\img\\dog2.png",
+      "sizes": "320x320"
+    }
+  ]
+}
