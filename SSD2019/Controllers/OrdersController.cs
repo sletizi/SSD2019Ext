@@ -21,63 +21,86 @@ namespace SSD2019.Controllers
             try
             {
                 List<Order> result = persistence.getOrders();
+                return Ok(JArray.FromObject(result));
+            }
+            catch (Exception e)
+            {
+               return InternalServerError();
+            }
+        }
+
+        [HttpGet]
+        [Route("customers/{id}/orders")]
+        [ActionName("GetOrdersByCustomer")]
+        public IHttpActionResult GetOrdersByCustomer(string id)
+        {
+            try
+            {
+                List<Order> result = persistence.getCustomerOrders(id);
+                return Ok(JArray.FromObject(result));
+
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
+
+        }
+
+        [HttpPost]
+        [Route("customers/{id}/orders")]
+        [ActionName("AddOrderForCustomer")]
+        public IHttpActionResult AddOrderForCustomer(string id, Order order)
+        {
+            try
+            {
+                Order result = persistence.addCustomerOrder(order);
                 JObject response = new JObject();
-                response.Add("orders", JArray.FromObject(result));
+                response.Add("insertedOrder", JObject.FromObject(result));
                 return Ok(response.ToString());
             }
             catch (Exception e)
             {
-                if(e is DBErrorException)
-                {
-                    return InternalServerError();
-                } 
+                return InternalServerError();
             }
-            return InternalServerError();
-        }
-
-        [HttpGet]
-        [Route("customers/{id:int}/orders")]
-        [ActionName("GetOrdersByCustomer")]
-        public IHttpActionResult GetOrdersByCustomer(int id)
-        {
-            List<Order> result = persistence.getCustomerOrders(id);
-            JObject response = new JObject();
-            response.Add("customerOrders", JArray.FromObject(result));
-            return Ok(response.ToString());
-        }
-
-        [HttpPost]
-        [Route("customers/{id:int}/orders")]
-        [ActionName("AddOrderForCustomer")]
-        public IHttpActionResult AddOrderForCustomer(int id, Order order)
-        {
-            Order result = persistence.addCustomerOrder(order);
-            JObject response = new JObject();
-            response.Add("insertedOrder", JObject.FromObject(result));
-            return Ok(response.ToString());
+            
         }
 
         [HttpPut]
-        [Route("customers/{id:int}/orders")]
+        [Route("customers/{id}/orders")]
         [ActionName("ResetCustomerOrdersQuant")]
-        public IHttpActionResult ResetCustomerOrdersQuant(int id)
+        public IHttpActionResult ResetCustomerOrdersQuant(string id)
         {
-            bool result = persistence.resetCustomerQuant(id);
-            JObject response = new JObject();
-            
-            return result ? Content(HttpStatusCode.NoContent, string.Empty) :
-                Content(HttpStatusCode.NotFound, string.Empty);
+            try
+            {
+                bool result = persistence.resetCustomerQuant(id);
+                JObject response = new JObject();
+                return result ? Content(HttpStatusCode.NoContent, string.Empty) :
+                    Content(HttpStatusCode.NotFound, string.Empty);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
+           
         }
 
         [HttpDelete ]
-        [Route("customers/{id:int}/orders")]
-        [ActionName("ResetCustomerOrdersQuant")]
-        public IHttpActionResult DeleteAllCustomerOrders(int id)
+        [Route("customers/{id}/orders")]
+        [ActionName("DeleteAllCustomerOrders")]
+        public IHttpActionResult DeleteAllCustomerOrders(string id)
         {
-            bool result = persistence.deleteCustomerOrders(id);
-            JObject response = new JObject();
-            return result ? Content(HttpStatusCode.NoContent, string.Empty) :
-                Content(HttpStatusCode.NotFound, string.Empty);
+            try
+            {
+                bool result = persistence.deleteCustomerOrders(id);
+                JObject response = new JObject();
+                return result ? Content(HttpStatusCode.OK, string.Empty) :
+                    Content(HttpStatusCode.NotFound, string.Empty);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
         }
     }
 }

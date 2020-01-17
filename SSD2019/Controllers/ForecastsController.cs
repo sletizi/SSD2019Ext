@@ -18,7 +18,7 @@ namespace SSD2019.Controllers
             return Ok("ok");
         }
         [HttpGet]
-        [Route("customers/{id:int}/forecasts")]
+        [Route("customers/{id}/forecasts")]
         [ActionName("GetForecastsByCustomer")]
         public IHttpActionResult GetForecastsByCustomer()
         {

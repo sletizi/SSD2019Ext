@@ -17,8 +17,7 @@ namespace SSD2019
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/",
-                defaults: new { id = RouteParameter.Optional }
+                routeTemplate: "api/"
             );
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));

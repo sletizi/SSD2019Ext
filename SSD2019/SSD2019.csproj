@@ -83,6 +83,9 @@
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <Content Include="myStyle.css" />
+    <Content Include="python_scripts\arima_forecast.py" />
+    <Content Include="python_scripts\chartOrders.py" />
+    <Content Include="python_scripts\common.py" />
     <Content Include="script.js" />
     <Content Include="Web.config" />
   </ItemGroup>

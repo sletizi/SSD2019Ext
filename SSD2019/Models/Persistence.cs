@@ -81,12 +81,11 @@ namespace SSD2019.Models
 
         public bool resetCustomerQuant(string custId)
         {
-            List<Order> lstOrders = new List<Order>();
             IDbConnection conn = new SqlConnection(connectionString);
             using (conn)
             {
                 conn.Open();
-                string queryText = "update ordini set quant=0 where customer=@custId" /*order by quant"*/;
+                string queryText = "update ordini set quant=0 where customer=@custId";
                 IDbCommand com = PrepareParametrizedStringQuery(conn, queryText, DbType.String, custId);
                 return com.ExecuteNonQuery() > 0 ? true : false;
             }
@@ -94,7 +93,14 @@ namespace SSD2019.Models
 
         public bool deleteCustomerOrders(string custId)
         {
-            return false;
+            IDbConnection conn = new SqlConnection(connectionString);
+            using (conn)
+            {
+                conn.Open();
+                string queryText = "delete from ordini where customer=@custId";
+                IDbCommand com = PrepareParametrizedStringQuery(conn, queryText, DbType.String, custId);
+                return com.ExecuteNonQuery() > 0 ? true : false;
+            }
         }
 
         private IDbCommand PrepareParametrizedStringQuery(IDbConnection conn, string queryText, DbType paramType, string paramValue)
