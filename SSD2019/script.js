@@ -17,24 +17,6 @@ $(document).ready(function () {
         alert("you want to read all the orders of the customer " + customer);
     }
 
-    $('.customerButton').prop("disabled", true);
-    $('input').keyup(function () {
-        if ($(this).val().length > 0) {
-            cust = $(this).val();
-            $('.customerButton').removeClass('buttonNoHover');
-            $('.customerButton').addClass('buttonHover');
-            $('.customerButton').prop("disabled", false);
-            $('#addOrderForCustomer').prop("disabled", true);
-            $('#addOrderForCustomer').removeClass('buttonHover');
-            $('#addOrderForCustomer').addClass('buttonNoHover');
-
-        } else {
-            cust = null;
-            $('.customerButton').removeClass('buttonHover');
-            $('.customerButton').addClass('buttonNoHover');
-            $('.customerButton').prop("disabled", true);
-        }
-    });
     $('#getAll').click(function () {
         readAll();
     })
@@ -55,6 +37,24 @@ $(document).ready(function () {
         alert("You have selected - " + selectedMethod);
     })
 
-    
+
+    $('.customerButton').prop("disabled", true);
+    $('input').keyup(function () {
+        if ($(this).val().length > 0) {
+            cust = $(this).val();
+            $('.customerButton').removeClass('buttonNoHover');
+            $('.customerButton').addClass('buttonHover');
+            $('.customerButton').prop("disabled", false);
+            $('#addOrderForCustomer').prop("disabled", true);
+            $('#addOrderForCustomer').removeClass('buttonHover');
+            $('#addOrderForCustomer').addClass('buttonNoHover');
+
+        } else {
+            cust = null;
+            $('.customerButton').removeClass('buttonHover');
+            $('.customerButton').addClass('buttonNoHover');
+            $('.customerButton').prop("disabled", true);
+        }
+    });
 
 });

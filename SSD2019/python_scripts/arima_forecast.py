@@ -1,15 +1,14 @@
 # ARIMA, orders data series
-import os,sys
+import os,sys, io, base64
 os.getcwd()
 local_path = sys.argv[1]
 #local_path = 'C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\progetto\\Form2\\Form2\\[python_scripts]'
 os.chdir(local_path) 
 
 import pandas as pd
-import pypyodbc
+import pymssql
 import numpy as np
 from sqlalchemy import create_engine
-import common
 
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 import matplotlib.pyplot as plt
@@ -17,17 +16,18 @@ plt.rcParams.update({'figure.figsize':(6,4), 'figure.dpi':120})
 
 # ---------------------------- read from sqlite database
 def load_orders(customers):
-	SQL = "SELECT time,quant FROM ordini WHERE customer IN ({})"\
-		.format(customers)
+	
+    SQL = "SELECT time,quant FROM ordini WHERE customer IN ({})".format(customers)
+    
+    host = "137.204.72.73"
+    username = "studSSD"
+    password = "studSSD"
+    db = "studenti"
+    engine = pymssql.connect(host, username, password, db)						
 
-	engine = pypyodbc.connect("Driver = {SQL Server Native Client 11.0};"
-							"Server=137.204.72.73;"
-							"Database=studenti;"
-							"uid=studSSD;pwd=studSSD")							
+    df_allorders = pd.read_sql_query(SQL, engine)
 
-	df_allorders = pd.read_sql_query(SQL, engine)
-
-	return df_allorders
+    return df_allorders
 
 # ------------------------------ Accuracy metrics
 def forecast_accuracy(forecast, actual):
@@ -48,7 +48,7 @@ def forecast_accuracy(forecast, actual):
 
 #read time series into dataframe df
 #df = pd.read_csv('customer12.csv', header=0, names = ['cust12'], index_col=0)
-
+customers = sys.argv[2]
 #customers = "'cust12'"
 
 df = load_orders(customers)
@@ -56,6 +56,78 @@ df = load_orders(customers)
 # !pip3 install pyramid-arima
 import pmdarima.arima as pm
 from statsmodels.tsa.arima_model import ARIMA
+
+def load_stock_data(db, tickers, start_date, end_date):
+
+	"""
+	Loads the stock data for the specified ticker symbols, and for the specified date range.
+	:param db: Full path to database with stock data.
+	:param tickers: A list with ticker symbols.
+	:param start_date: The start date.
+	:param end_date: The start date.
+	:return: A list of time-indexed dataframe, one for each ticker, ordered by date.
+	"""
+
+	SQL = "SELECT * FROM Quotes WHERE TICKER IN ({}) AND Date >= '{}' AND Date <= '{}'"\
+		.format(tickers, start_date, end_date)
+
+	engine = create_engine('sqlite:///' + db)
+
+	df_all = pd.read_sql(SQL, engine, index_col='Date', parse_dates='Date')
+	df_all = df_all.round(2)
+
+	result = []
+
+	for ticker in tickers.split(","):
+		df_ticker = df_all.query("Ticker == " + ticker)
+		result.append(df_ticker)
+
+	return result
+
+#comunica con il db
+def load_orders(customers):
+
+    SQL = "SELECT * FROM ordini WHERE customer IN ({})".format(customers)
+    
+    host = "137.204.72.73"
+    username = "studSSD"
+    password = "studSSD"
+    db = "studenti"
+    engine = pymssql.connect(host, username, password, db)						
+
+    #df_allorders = pd.read_sql_query(SQL, engine)
+    df_allorders = pd.read_sql(SQL, engine, index_col='id')
+
+    result = [] 
+
+    for cust in customers.split(","):
+        df_order = df_allorders.query("customer == " + cust)
+        result.append(df_order)
+    return result
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+def print_figure(fig):
+	"""
+	Converts a figure (as created e.g. with matplotlib or seaborn) to a png image and this 
+	png subsequently to a base64-string, then prints the resulting string to the console.
+	"""
+	
+	buf = io.BytesIO()
+	fig.savefig(buf, format='png')
+	print(base64.b64encode(buf.getbuffer()))
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# Custom colormap that is used with line charts
+COLOR_MAP = [
+	'blue', 'orange', 'green', 'red', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan',
+	'darkblue', 'darkorange', 'darkgreen', 'darkred', 'rebeccapurple', 'darkslategray', 
+	'mediumvioletred', 'dimgray', 'seagreen', 'darkcyan', 'deepskyblue', 'yellow', 
+	'lightgreen', 'lightcoral', 'plum', 'lightslategrey', 'lightpink', 'lightgray', 
+	'lime', 'cadetblue'
+	]
 
 # Forecast next 3 months
 n_forecast = 3
@@ -103,4 +175,4 @@ plt.title("SARIMA - Final Forecast of {}".format(customers))
 #plt.show()
 
 # Finally, print the chart as base64 string to the console.
-common.print_figure(plt.gcf())
+print_figure(plt.gcf())

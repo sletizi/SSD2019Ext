@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,6 +14,19 @@ namespace SSD2019.Controllers
     public class OrdersController : ApiController
     {
         private Persistence persistence = new Persistence();
+
+        string pythonPath;
+        string pythonScriptsPath;
+
+        PythonRunner python;
+
+        public OrdersController()
+        {
+            pythonScriptsPath = ConfigurationManager.AppSettings["pyScripts"];
+            pythonPath = ConfigurationManager.AppSettings["pythonPath"];
+            python = new PythonRunner(pythonPath, 20000);
+        }
+
         [HttpGet]
         [Route("orders")]
         [ActionName("GetAllOrders")]
@@ -102,5 +116,34 @@ namespace SSD2019.Controllers
                 return InternalServerError();
             }
         }
+
+
+        [HttpGet]
+        [Route("ordersChart")]
+        [ActionName("GetAllOrdersChart")]
+        public IHttpActionResult GetAllOrdersChart()
+        {
+            pythonScriptsPath = System.IO.Path.GetFullPath(pythonScriptsPath);
+            try
+            {
+                string customersString = getCustomersStringList(persistence.getCustomersList());
+                string bitmapString=  python.getImage(pythonScriptsPath,
+                                    "chartOrders.py",
+                                     pythonScriptsPath,
+
+                                     customersString);
+                return Content(HttpStatusCode.OK, bitmapString);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
+        }
+
+        private string getCustomersStringList(List<String> customerList)
+        {
+            return string.Join(",", customerList.Select(s => "'"+s+"'"));
+        }
+
     }
 }

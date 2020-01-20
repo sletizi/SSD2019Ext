@@ -87,13 +87,16 @@
     <Content Include="python_scripts\chartOrders.py" />
     <Content Include="python_scripts\common.py" />
     <Content Include="script.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ForecastsController.cs" />
     <Compile Include="Controllers\OptimizationsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\PythonRunner.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

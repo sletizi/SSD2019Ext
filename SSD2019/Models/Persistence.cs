@@ -103,6 +103,29 @@ namespace SSD2019.Models
             }
         }
 
+        public List<String> getCustomersList()
+        {
+            List<String> lstCustomer = new List<String>();
+            IDbConnection conn = new SqlConnection(connectionString);
+            using (conn)
+            {
+                conn.Open();
+                IDbCommand com = conn.CreateCommand();
+                string queryText = "select distinct customer from ordini";
+                com.CommandText = queryText;
+                using (IDataReader reader = com.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lstCustomer.Add(Convert.ToString(reader["customer"]));
+                    }
+                }
+            }
+            return lstCustomer;
+        }
+
+
+
         private IDbCommand PrepareParametrizedStringQuery(IDbConnection conn, string queryText, DbType paramType, string paramValue)
         {
             IDbCommand com = conn.CreateCommand();
@@ -123,6 +146,8 @@ namespace SSD2019.Models
                 com.Parameters.Add(param);
             }
         }
+
+
 
     }
 

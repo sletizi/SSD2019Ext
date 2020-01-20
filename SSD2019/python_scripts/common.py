@@ -6,6 +6,8 @@ Common functions and a colormap for the line charts.
 
 from sqlalchemy import create_engine
 import pandas as pd
+import pypyodbc
+
 
 def load_stock_data(db, tickers, start_date, end_date):
 
@@ -35,22 +37,19 @@ def load_stock_data(db, tickers, start_date, end_date):
 	return result
 
 #comunica con il db
-def load_orders(db, customers):
+def load_orders(customers):
 
 	SQL = "SELECT * FROM ordini WHERE customer IN ({})"\
 		.format(customers)
 
-	engine = create_engine('sqlite:///' + db) #capisce k è un accesso a sqlLite, con engine creo un collegamento con il db
+	engine = pypyodbc.connect("Driver = {SQL Server Native Client 11.0};"
+							"Server=137.204.72.73;"
+							"Database=studenti;"
+							"uid=studSSD;pwd=studSSD")							
 
-	df_allorders = pd.read_sql(SQL, engine, index_col='id') #istruzione per leggere ciò che c'è scritto in SQL tramite l'engine utilizzando l'indice della colonna id
+	df_allorders = pd.read_sql_query(SQL, engine)
 
-	result = [] #inizializzo la lista dei risultati
-
-	for cust in customers.split(","):
-		df_order = df_allorders.query("customer == " + cust)
-		result.append(df_order)
-
-	return result
+	return df_allorders
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
