@@ -131,14 +131,12 @@ $(document).ready(function () {
         getAllOrdersChart(cust);
     })
     $('#forecast').click(function () {
-        $('input').keyup(function () {
-            if ($(this).val().length > 0) {
-                forecastsSpecifiedCustomer(cust);
-            } else {
-                alert("ehi");
-                forecastsAll();
-            }
-        })
+        if ($('input').val().length > 0) {
+            forecastsSpecifiedCustomer(cust);
+        } else {
+            alert("ehi");
+            forecastsAll();
+        }
     })
     $('#optimize').click(function () {
         var selectedMethod = getSelectedOptimizationMethod();
