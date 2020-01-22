@@ -20,7 +20,11 @@ $(document).ready(function () {
                     $("#resultsTextArea").val(JSON.stringify(result));
                 },
                 error: function (xhr, status, p3, p4) {
-                    alert(JSON.stringify(xhr.responseText));
+                    var err = "Error " + " " + status + " " + p3;
+                        if (xhr.responseText && xhr.responseText[0] == "{") {
+                            err = JSON.parse(xhr.responseText).message;
+                            alert(err);
+                        }
                 }
             });
     }
