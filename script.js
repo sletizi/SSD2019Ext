@@ -20,11 +20,8 @@ $(document).ready(function () {
                     $("#resultsTextArea").val(JSON.stringify(result));
                 },
                 error: function (xhr, status, p3, p4) {
-                    var err = "Error " + " " + status + " " + p3;
-                        if (xhr.responseText && xhr.responseText[0] == "{") {
-                            err = JSON.parse(xhr.status);
-                            alert(err);
-                        }
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
                 }
             });
     }
