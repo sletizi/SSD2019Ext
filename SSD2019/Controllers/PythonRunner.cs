@@ -326,8 +326,8 @@ namespace SSD2019.Controllers
 
             //contiene la chiamata a python con tutti gli argomenti di cui necessita
             //(lo vediamo dal file di python che vuole 3 argomenti)
-            //strCommand = BuildArgumentString(pythonScriptsPath + "\\" + script, arguments);
-            strCommand = BuildArgumentString("C:\\Users\\Mark Studio\\Desktop\\remote_db_arima_forecast.py ", new string[] { "C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\estensioneProgetto\\SSD2019\\SSD2019\\python_scripts ", "'cust12'" });
+            strCommand = BuildArgumentString(pythonScriptsPath + "\\" + script, arguments);
+            //strCommand = BuildArgumentString("C:\\Users\\Mark Studio\\Desktop\\remote_db_arima_forecast.py ", new string[] { "C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\estensioneProgetto\\SSD2019\\SSD2019\\python_scripts ", "'cust12'" });
             
             string mode = "dos";//genero un processo esterno che chiama python, gli fa eseguire qll cosa scritta in strCommand e ne salva l'output
                                 //ci sn diversi modi per lanciare un processo esterno, lui l'aveva implementato in 3 modi diversi ma usiamo il dos

@@ -9,8 +9,20 @@ $(document).ready(function () {
 
     //SERVER INTERACTION FUNCTIONS
     function readAll() {
-        //richiesta al server
-        alert("you want to read all the orders");
+        $.ajax(
+            {
+                url: "api/orders",
+                type: "GET",
+                contentType: "application/json",
+                data: "",
+                success: function (result) {
+                    alert(JSON.stringify(result));//TODO stringify
+                    $("#resultsTextArea").val(JSON.stringify(result));
+                },
+                error: function (xhr, status, p3, p4) {
+                    alert("Something went wrong");
+                }
+            });
     }
     function readCustomerOrders(customer) {
         //richiesta al server
