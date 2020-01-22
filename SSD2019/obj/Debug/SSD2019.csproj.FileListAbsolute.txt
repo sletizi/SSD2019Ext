@@ -106,3 +106,6 @@ C:\Users\Mark Studio\Desktop\Universita\Magistrale\SsD\estensioneProgetto\SSD201
 C:\Users\Mark Studio\Desktop\Universita\Magistrale\SsD\estensioneProgetto\SSD2019\SSD2019\bin\it\Microsoft.VisualStudio.Shell.15.0.resources.dll
 C:\Users\Mark Studio\Desktop\Universita\Magistrale\SsD\estensioneProgetto\SSD2019\SSD2019\bin\it\Microsoft.VisualStudio.Shell.Design.resources.dll
 C:\Users\Mark Studio\Desktop\Universita\Magistrale\SsD\estensioneProgetto\SSD2019\SSD2019\bin\it\Microsoft.VisualStudio.GraphModel.resources.dll
+C:\Users\Mark Studio\Desktop\Universita\Magistrale\SsD\estensioneProgetto\SSD2019\SSD2019\bin\System.Web.Cors.dll
+C:\Users\Mark Studio\Desktop\Universita\Magistrale\SsD\estensioneProgetto\SSD2019\SSD2019\bin\System.Web.Http.Cors.dll
+C:\Users\Mark Studio\Desktop\Universita\Magistrale\SsD\estensioneProgetto\SSD2019\SSD2019\bin\System.Web.Http.Cors.xml

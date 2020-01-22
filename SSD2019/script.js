@@ -16,7 +16,6 @@ $(document).ready(function () {
                 contentType: "application/json",
                 data: "",
                 success: function (result) {
-                    alert(JSON.stringify(result));//TODO stringify
                     $("#resultsTextArea").val(JSON.stringify(result));
                 },
                 error: function (xhr, status, p3, p4) {
@@ -25,8 +24,20 @@ $(document).ready(function () {
             });
     }
     function readCustomerOrders(customer) {
-        //richiesta al server
-        alert("you want to read all the orders of the customer " + customer);
+        $.ajax(
+            {
+                url: "api/customers/"+customer+"/orders",
+                type: "GET",
+                contentType: "application/json",
+                data: "",
+                success: function (result) {
+                    alert(JSON.stringify(result));
+                    $("#resultsTextArea").val(JSON.stringify(result));
+                },
+                error: function (xhr, status, p3, p4) {
+                    alert("Something went wrong");
+                }
+            });
     }
 
     $('#getAll').click(function () {

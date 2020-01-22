@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.IO;
 using SSD2019.Models;
 
@@ -28,6 +29,7 @@ namespace SSD2019.Controllers
         [HttpGet]
         [Route("forecasts")]
         [ActionName("GetAllForecasts")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         public IHttpActionResult GetAllForecasts()
         {
             List<String> customersList = persistence.getCustomersList();
@@ -86,6 +88,7 @@ namespace SSD2019.Controllers
 
         [HttpGet]
         [Route("customers/{id}/forecasts")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         [ActionName("GetForecastsByCustomer")]
         public IHttpActionResult GetForecastsByCustomer(string id)
         {

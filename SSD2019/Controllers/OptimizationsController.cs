@@ -6,10 +6,12 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using SSD2019.Models;
+using System.Web.Http.Cors;
 
 namespace SSD2019.Controllers
 {
     [RoutePrefix("api")]
+    [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
     public class OptimizationsController : ApiController
     {
         private GAPclass GAP = new GAPclass();
@@ -17,6 +19,7 @@ namespace SSD2019.Controllers
         private ForecastsController forecastController = new ForecastsController();
         [HttpGet]
         [Route("simpleConstruct")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         [ActionName("SimpleConstruct")]
         public IHttpActionResult SimpleConstruct()
         {
@@ -28,6 +31,7 @@ namespace SSD2019.Controllers
 
         [HttpGet]
         [Route("opt10")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         [ActionName("Opt10")]
         public IHttpActionResult Opt10()
         {
@@ -38,6 +42,7 @@ namespace SSD2019.Controllers
 
         [HttpGet]
         [Route("tabuSearch")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         [ActionName("tabuSearch")]
         public IHttpActionResult TabuSearch()
         {

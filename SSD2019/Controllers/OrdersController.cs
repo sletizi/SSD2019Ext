@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Newtonsoft.Json.Linq;
+using System.Web.Http.Cors;
 using SSD2019.Models;
 
 namespace SSD2019.Controllers
@@ -28,6 +29,7 @@ namespace SSD2019.Controllers
         }
 
         [HttpGet]
+        [EnableCors(origins: "https://maluffa.github.io", headers:"*", methods:"*")]
         [Route("orders")]
         [ActionName("GetAllOrders")]
         public IHttpActionResult GetAllOrders()
@@ -45,6 +47,7 @@ namespace SSD2019.Controllers
 
         [HttpGet]
         [Route("customers/{id}/orders")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         [ActionName("GetOrdersByCustomer")]
         public IHttpActionResult GetOrdersByCustomer(string id)
         {
@@ -64,6 +67,7 @@ namespace SSD2019.Controllers
         [HttpPost]
         [Route("customers/{id}/orders")]
         [ActionName("AddOrderForCustomer")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         public IHttpActionResult AddOrderForCustomer(string id, Order order)
         {
             try
@@ -83,6 +87,7 @@ namespace SSD2019.Controllers
         [HttpPut]
         [Route("customers/{id}/orders")]
         [ActionName("ResetCustomerOrdersQuant")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         public IHttpActionResult ResetCustomerOrdersQuant(string id)
         {
             try
@@ -102,6 +107,7 @@ namespace SSD2019.Controllers
         [HttpDelete ]
         [Route("customers/{id}/orders")]
         [ActionName("DeleteAllCustomerOrders")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         public IHttpActionResult DeleteAllCustomerOrders(string id)
         {
             try
@@ -121,6 +127,7 @@ namespace SSD2019.Controllers
         [HttpGet]
         [Route("ordersChart")]
         [ActionName("GetAllOrdersChart")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         public IHttpActionResult GetAllOrdersChart()
         {
             pythonScriptsPath = System.IO.Path.GetFullPath(pythonScriptsPath);
