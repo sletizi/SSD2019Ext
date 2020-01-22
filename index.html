@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/myStyle.css" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+    <link rel="manifest" href="/manifest.json" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <meta name="SSD2019" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SSD2019</title>
+</head>
+<body>
+    <div class="title">
+        <h1>SSD2019 - ESTENSIONE PROGETTO</h1>
+    </div>
+    <div class="flex-container">
+        <div class="dbButtons">
+            <div class="user">
+                <label class="label">CUSTOMER ID:</label>
+                <input type="text" id="customer" class="input-text">
+            </div> 
+            <button type="button" id="getAll" class="button buttonHover" onclick="">Read Orders</button>
+            <button type="button" id="getAllForCustomer" class="customerButton button " onclick="">Read Customer Orders</button> <!--activate only if a text in the label is present-->
+            <button type="button" id="addOrderForCustomer" class="customerButton button " onclick="">Add Customer</button> <!--activate only if a text in the label is present-->
+            <button type="button" id="deleteOrdersForCustomer" class="customerButton button " onclick="">Delete Customer</button> <!--activate only if a text in the label is present-->
+            <button type="button" id="resetCustomerQuant" class="customerButton button " onclick="">Reset Customer Quant</button> <!--activate only if a text in the label is present-->
+
+        </div>
+        <div class="forecast">
+            <button id="forecast" class="button buttonHover">Forecast</button>
+            <div class="labelForm">
+                <label class="label">OPTIMIZATION STRATEGY:</label>
+                <form class="form">
+                    <select class="optimizationMethod">
+                        <option value="simpleconstruct">Simple Construct</option>
+                        <option value="opt10">Opt10</option>
+                        <option value="tabusearch">TabuSearch</option>
+                    </select>
+                </form>
+            </div>      
+            <button id="optimize" class="button " type="button" onclick="">Optimize</button>
+        </div>
+        <div class="results">
+            <textarea readonly id="resultsTextArea" class="text-area"></textarea>
+            <div id="canvas"></div>
+        </div>
+    </div>
+</body>
+</html>
