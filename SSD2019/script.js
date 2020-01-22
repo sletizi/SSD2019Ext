@@ -39,6 +39,21 @@ $(document).ready(function () {
                 }
             });
     }
+    function deleteAllCustomerOrders(customer) {
+        $.ajax(
+            {
+                url: "api/customers/" + customer + "/orders",
+                type: "DELETE",
+                contentType: "application/json",
+                data: "",
+                success: function (result) {
+                    
+                },
+                error: function (xhr, status, p3, p4) {
+                    alert("Something went wrong");
+                }
+            });
+    }
 
     $('#getAll').click(function () {
         readAll();
@@ -47,7 +62,7 @@ $(document).ready(function () {
         readCustomerOrders(cust);
     })
     $('#deleteOrdersForCustomer').click(function () {
-
+        deleteAllCustomerOrders(cust);
     })
     $('#resetCustomerQuant').click(function () {
 
