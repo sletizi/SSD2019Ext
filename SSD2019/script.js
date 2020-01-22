@@ -135,6 +135,7 @@ $(document).ready(function () {
             if ($(this).val().length > 0) {
                 forecastsSpecifiedCustomer(cust);
             } else {
+                alert("ehi");
                 forecastsAll();
             }
         })
