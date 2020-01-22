@@ -26,7 +26,7 @@ $(document).ready(function () {
     function readCustomerOrders(customer) {
         $.ajax(
             {
-                url: "api/customers/"+customer+"/orders",
+                url: "https://localhost:44306/api/customers/"+customer+"/orders",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
@@ -42,7 +42,7 @@ $(document).ready(function () {
     function deleteAllCustomerOrders(customer) {
         $.ajax(
             {
-                url: "api/customers/" + customer + "/orders",
+                url: "https://localhost:44306/api/customers/" + customer + "/orders",
                 type: "DELETE",
                 contentType: "application/json",
                 data: "",
@@ -57,7 +57,7 @@ $(document).ready(function () {
     function resetCustomerOrdersQuant(customer) {
         $.ajax(
             {
-                url: "api/customers/" + customer + "/orders",
+                url: "https://localhost:44306/api/customers/" + customer + "/orders",
                 type: "PUT",
                 contentType: "application/json",
                 data: "",
@@ -72,7 +72,7 @@ $(document).ready(function () {
     function getAllOrdersChart() {
         $.ajax(
             {
-                url: "api/ordersChart",
+                url: "https://localhost:44306/api/ordersChart",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
@@ -87,7 +87,7 @@ $(document).ready(function () {
     function forecastsSpecifiedCustomer(customer) {
         $.ajax(
             {
-                url: "api/customers/"+customer+"/forecasts",
+                url: "https://localhost:44306/api/customers/"+customer+"/forecasts",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
@@ -102,7 +102,7 @@ $(document).ready(function () {
     function forecastsAll() {
         $.ajax(
             {
-                url: "api/forecasts",
+                url: "https://localhost:44306/api/forecasts",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
