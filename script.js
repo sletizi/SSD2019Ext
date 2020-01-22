@@ -20,7 +20,7 @@ $(document).ready(function () {
                     $("#resultsTextArea").val(JSON.stringify(result));
                 },
                 error: function (xhr, status, p3, p4) {
-                    alert(JSON.stringify(xhr),JSON.stringify(status));
+                    alert(JSON.stringify(xhr));
                 }
             });
     }
