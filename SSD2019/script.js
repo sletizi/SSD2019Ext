@@ -1,6 +1,8 @@
 ﻿
 //DOM MANIPULATION 
 $(document).ready(function () {
+
+    var ip = "localhost";
     //UTILITY FUNCTIONS
     function getSelectedOptimizationMethod() {
         return $(".optimizationMethod").children("option:selected").text();
@@ -11,7 +13,7 @@ $(document).ready(function () {
     function readAll() {
         $.ajax(
             {
-                url: "https://localhost:44306/api/orders",
+                url: "https://"+ip+":44306/api/orders",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
@@ -26,7 +28,7 @@ $(document).ready(function () {
     function readCustomerOrders(customer) {
         $.ajax(
             {
-                url: "https://localhost:44306/api/customers/"+customer+"/orders",
+                url: "https://" + ip +":44306/api/customers/"+customer+"/orders",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
@@ -42,7 +44,7 @@ $(document).ready(function () {
     function deleteAllCustomerOrders(customer) {
         $.ajax(
             {
-                url: "https://localhost:44306/api/customers/" + customer + "/orders",
+                url: "https://" + ip +":44306/api/customers/" + customer + "/orders",
                 type: "DELETE",
                 contentType: "application/json",
                 data: "",
@@ -57,7 +59,7 @@ $(document).ready(function () {
     function resetCustomerOrdersQuant(customer) {
         $.ajax(
             {
-                url: "https://localhost:44306/api/customers/" + customer + "/orders",
+                url: "https://" + ip +":44306/api/customers/" + customer + "/orders",
                 type: "PUT",
                 contentType: "application/json",
                 data: "",
@@ -72,7 +74,7 @@ $(document).ready(function () {
     function getAllOrdersChart() {
         $.ajax(
             {
-                url: "https://localhost:44306/api/ordersChart",
+                url: "https://" + ip +":44306/api/ordersChart",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
@@ -87,7 +89,7 @@ $(document).ready(function () {
     function forecastsSpecifiedCustomer(customer) {
         $.ajax(
             {
-                url: "https://localhost:44306/api/customers/"+customer+"/forecasts",
+                url: "https://" + ip +":44306/api/customers/"+customer+"/forecasts",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
@@ -102,7 +104,7 @@ $(document).ready(function () {
     function forecastsAll() {
         $.ajax(
             {
-                url: "https://localhost:44306/api/forecasts",
+                url: "https://" + ip +":44306/api/forecasts",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
@@ -134,7 +136,6 @@ $(document).ready(function () {
         if ($('input').val().length > 0) {
             forecastsSpecifiedCustomer(cust);
         } else {
-            alert("ehi");
             forecastsAll();
         }
     })

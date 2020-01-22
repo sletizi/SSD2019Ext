@@ -93,7 +93,6 @@ namespace SSD2019.Controllers
             try
             {
                 bool result = persistence.resetCustomerQuant(id);
-                JObject response = new JObject();
                 return result ? Content(HttpStatusCode.NoContent, string.Empty) :
                     Content(HttpStatusCode.NotFound, string.Empty);
             }
@@ -113,7 +112,6 @@ namespace SSD2019.Controllers
             try
             {
                 bool result = persistence.deleteCustomerOrders(id);
-                JObject response = new JObject();
                 return result ? Content(HttpStatusCode.OK, string.Empty) :
                     Content(HttpStatusCode.NotFound, string.Empty);
             }
@@ -146,7 +144,21 @@ namespace SSD2019.Controllers
                 return InternalServerError();
             }
         }
-
+        [HttpGet]
+        [Route("customers")]
+        [ActionName("GetAllCustomers")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
+        public IHttpActionResult GetAllCustomers()
+        {
+            try
+            {
+                return Ok(JArray.FromObject(persistence.getCustomersList()));
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
+        }
         private string getCustomersStringList(List<String> customerList)
         {
             return string.Join(",", customerList.Select(s => "'"+s+"'"));

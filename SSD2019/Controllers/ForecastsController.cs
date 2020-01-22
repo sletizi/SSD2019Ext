@@ -10,6 +10,12 @@ using System.Web.Http.Cors;
 using System.IO;
 using SSD2019.Models;
 
+
+//TODO read bitmap in script
+//TODO change connection from remote to local. also change in python scripts
+//TODO check ip in scripts if we can set 127.0.0.1
+//TODO change policy to save results in gapReq.dat ?, anyway save the path in web.config
+
 namespace SSD2019.Controllers
 {
     [RoutePrefix("api")]
@@ -18,12 +24,14 @@ namespace SSD2019.Controllers
         string pythonScriptsPath;
         string pythonPath;
         private Persistence persistence = new Persistence();
+        string pklDirectory;
         PythonRunner python;
 
         public ForecastsController(){
             pythonScriptsPath = ConfigurationManager.AppSettings["pyScripts"];
             pythonPath = ConfigurationManager.AppSettings["pythonPath"];
             python = new PythonRunner(pythonPath, 20000);
+            pklDirectory = ConfigurationManager.AppSettings["pklDirectory"];
         }
 
         [HttpGet]
@@ -47,7 +55,8 @@ namespace SSD2019.Controllers
                         pythonScriptsPath,
                         "arimaForecast.py",
                         pythonScriptsPath,
-                        customer);
+                        customer,
+                        pklDirectory);
 
                     if (!string.IsNullOrWhiteSpace(pythonResult))
                     {
@@ -72,9 +81,9 @@ namespace SSD2019.Controllers
                     return InternalServerError();
                 }
             }
+            
             File.WriteAllLines("C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\estensioneProgetto\\SSD2019\\SSD2019\\previsions\\GAPreq.dat", results.Select(x => x.ToString()));
             return Ok(jarray);
-     
         }
 
         private double PrepareFileLoading(string outputString)
@@ -112,7 +121,8 @@ namespace SSD2019.Controllers
             return python.getImage(pythonScriptsPath,
                                     "arimaForecast.py",
                                      pythonScriptsPath,
-                                     $"'{customer}'");
+                                     $"'{customer}'",
+                                     pklDirectory);
         }
 
     }

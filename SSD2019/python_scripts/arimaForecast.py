@@ -4,7 +4,7 @@ os.getcwd()
 local_path = sys.argv[1]
 #local_path = "C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\estensioneProgetto\\SSD2019\\SSD2019\\python_scripts" 
 os.chdir(local_path) 
-
+import pickle
 import pandas as pd
 import pymssql
 import numpy as np
@@ -50,6 +50,7 @@ def forecast_accuracy(forecast, actual):
 #df = pd.read_csv('customer12.csv', header=0, names = ['cust12'], index_col=0)
 customers = sys.argv[2]
 #customers = "'cust1'"
+pklDirectory = sys.argv[3]
 
 df = load_orders(customers)
 
@@ -136,7 +137,11 @@ train = df.quant[0:-n_forecast]
 test  = df.quant[-n_forecast:]
 
 # Seasonal - fit stepwise auto-ARIMA, returns an ARIMA model
-smodel = pm.auto_arima(train, start_p=1, start_q=1,
+if os.path.isfile(pklDirectory+"\\{}.pkl".format(customers)) :
+    with open(pklDirectory+"\\{}.pkl".format(customers), 'rb') as pkl:
+        smodel = pickle.load(pkl)
+else:
+    smodel = pm.auto_arima(train, start_p=1, start_q=1,
                          test='adf',
                          max_p=3, max_q=3, m=12,
                          start_P=0, seasonal=True,
@@ -144,6 +149,8 @@ smodel = pm.auto_arima(train, start_p=1, start_q=1,
                          error_action='ignore',  
                          suppress_warnings=True, 
                          stepwise=True)
+    with open(pklDirectory+"\\{}.pkl".format(customers), 'wb') as pkl:
+        pickle.dump(smodel, pkl)
 
 # Predictions of y values based on "model", aka fitted values
 yhat = smodel.predict_in_sample(start=0, end=len(train))
