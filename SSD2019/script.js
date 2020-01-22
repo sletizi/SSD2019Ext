@@ -54,6 +54,66 @@ $(document).ready(function () {
                 }
             });
     }
+    function resetCustomerOrdersQuant(customer) {
+        $.ajax(
+            {
+                url: "api/customers/" + customer + "/orders",
+                type: "PUT",
+                contentType: "application/json",
+                data: "",
+                success: function (result) {
+
+                },
+                error: function (xhr, status, p3, p4) {
+                    alert("Something went wrong");
+                }
+            });
+    }
+    function getAllOrdersChart() {
+        $.ajax(
+            {
+                url: "api/ordersChart",
+                type: "GET",
+                contentType: "application/json",
+                data: "",
+                success: function (result) {
+                    //get the bitmap
+                },
+                error: function (xhr, status, p3, p4) {
+                    alert("Something went wrong");
+                }
+            });
+    }
+    function forecastsSpecifiedCustomer(customer) {
+        $.ajax(
+            {
+                url: "api/customers/"+customer+"/forecasts",
+                type: "GET",
+                contentType: "application/json",
+                data: "",
+                success: function (result) {
+                    //get the bitmap
+                },
+                error: function (xhr, status, p3, p4) {
+                    alert("Something went wrong");
+                }
+            });
+    }
+    function forecastsAll() {
+        $.ajax(
+            {
+                url: "api/forecasts",
+                type: "GET",
+                contentType: "application/json",
+                data: "",
+                success: function (result) {
+                    $("#resultsTextArea").val(JSON.stringify(result));
+                },
+                error: function (xhr, status, p3, p4) {
+                    alert("Something went wrong");
+                }
+            });
+    }
 
     $('#getAll').click(function () {
         readAll();
@@ -65,10 +125,19 @@ $(document).ready(function () {
         deleteAllCustomerOrders(cust);
     })
     $('#resetCustomerQuant').click(function () {
-
+        resetCustomerOrdersQuant(cust);
+    })
+    $('#chartCustomers').click(function () {
+        getAllOrdersChart(cust);
     })
     $('#forecast').click(function () {
-
+        $('input').keyup(function () {
+            if ($(this).val().length > 0) {
+                forecastsSpecifiedCustomer(cust);
+            } else {
+                forecastsAll();
+            }
+        })
     })
     $('#optimize').click(function () {
         var selectedMethod = getSelectedOptimizationMethod();
