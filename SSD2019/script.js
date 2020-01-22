@@ -11,7 +11,7 @@ $(document).ready(function () {
     function readAll() {
         $.ajax(
             {
-                url: "api/orders",
+                url: "https://localhost:44306/api/orders",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
