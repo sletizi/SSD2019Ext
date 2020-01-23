@@ -19,8 +19,6 @@ namespace SSD2019.Controllers
         private string pythonPath;
         private string pythonScriptsPath;
         private string dbPath;
-        private string connectionString;
-        private string factory;
         private PythonRunner python;
 
         public OrdersController()
@@ -28,11 +26,8 @@ namespace SSD2019.Controllers
             pythonScriptsPath = ConfigurationManager.AppSettings["projectPath"]+"\\python_scripts";
             pythonPath = ConfigurationManager.AppSettings["pythonPath"];
             python = new PythonRunner(pythonPath, 20000);
-            dbPath = ConfigurationManager.AppSettings["projectPath"] + "\\SQLite\\ordiniMI2019.sqlite";
-            connectionString = ConfigurationManager.ConnectionStrings["SQLiteConn"].ConnectionString;
-            connectionString = connectionString.Replace("DBFILE", dbPath);
-            factory = ConfigurationManager.ConnectionStrings["SQLiteConn"].ProviderName;
-            persistence = new Persistence(connectionString, factory, dbPath);
+            dbPath = ConfigurationManager.AppSettings["projectPath"] + "\\App_Data\\ordiniMI2019.sqlite";
+            persistence = Persistence.Instance;
         }
 
         [HttpGet]

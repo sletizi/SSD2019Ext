@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Configuration;
 using SSD2019.Models;
 using System.Web.Http.Cors;
 
@@ -15,7 +16,8 @@ namespace SSD2019.Controllers
     public class OptimizationsController : ApiController
     {
         private GAPclass GAP = new GAPclass();
-        private LocalPersistence localPersistence = new LocalPersistence();
+        private Persistence persistence = Persistence.Instance;
+        private string gapReqPath = ConfigurationManager.AppSettings["projectPath"] + "\\previsions\\GAPreq.dat";
         private ForecastsController forecastController = new ForecastsController();
         [HttpGet]
         [Route("simpleConstruct")]
@@ -53,12 +55,12 @@ namespace SSD2019.Controllers
 
         private void checkPrevisionFile()
         {
-            localPersistence.ReadGAPinstance(GAP);
-            if (!File.Exists("C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\estensioneProgetto\\SSD2019\\SSD2019\\previsions\\GAPreq.dat"))
+            persistence.ReadGAPinstance(GAP);
+            if (!File.Exists(gapReqPath))
             {
                 forecastController.GetAllForecasts();
             }
-            string[] txtData = File.ReadAllLines("C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\estensioneProgetto\\SSD2019\\SSD2019\\previsions\\GAPreq.dat");
+            string[] txtData = File.ReadAllLines(gapReqPath);
             GAP.req = Array.ConvertAll<string, int>(txtData, new Converter<string, int>(i => int.Parse(i)));
         }
 

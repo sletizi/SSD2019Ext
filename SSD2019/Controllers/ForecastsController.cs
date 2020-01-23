@@ -11,11 +11,8 @@ using System.IO;
 using SSD2019.Models;
 
 
-//TODO change connection from remote to local. also change in python scripts
 //TODO check ip in scripts if we can set 127.0.0.1
 //TODO change policy to save results in gapReq.dat ?, anyway save the path in web.config
-//TODO cancel json representation
-//TODO add css flex to graphics
 
 namespace SSD2019.Controllers
 {
@@ -24,11 +21,9 @@ namespace SSD2019.Controllers
     {
         string pythonScriptsPath;
         string pythonPath;
+        string pklDirectory, dbPath, gapReqPath;
         private Persistence persistence;
-        string pklDirectory;
-        string dbPath;
-        string connectionString;
-        string factory;
+
         PythonRunner python;
 
         public ForecastsController(){
@@ -36,11 +31,9 @@ namespace SSD2019.Controllers
             pythonPath = ConfigurationManager.AppSettings["pythonPath"];
             python = new PythonRunner(pythonPath, 20000);
             pklDirectory = ConfigurationManager.AppSettings["projectPath"]+"\\previsions";
-            dbPath = ConfigurationManager.AppSettings["projectPath"] + "\\SQLite\\ordiniMI2019";
-            connectionString = ConfigurationManager.ConnectionStrings["SQLiteConn"].ConnectionString;
-            connectionString = connectionString.Replace("DBFILE", dbPath);
-            factory = ConfigurationManager.ConnectionStrings["SQLiteConn"].ProviderName;
-            persistence = new Persistence(connectionString, factory, dbPath);
+            dbPath = ConfigurationManager.AppSettings["projectPath"] + "\\App_Data\\ordiniMI2019.sqlite";
+            gapReqPath = ConfigurationManager.AppSettings["projectPath"] + "\\previsions\\GAPreq.dat";
+            persistence = Persistence.Instance;
         }
 
         [HttpGet]
@@ -50,7 +43,6 @@ namespace SSD2019.Controllers
         public IHttpActionResult GetAllForecasts()
         {
             List<String> customersList = persistence.getCustomersList();
-            pythonScriptsPath = System.IO.Path.GetFullPath(pythonScriptsPath);//todo:check se non va
             double[] results = new double[customersList.Count];
             int i = 0;
             string customer, outputString;
@@ -92,7 +84,7 @@ namespace SSD2019.Controllers
                 }
             }
             
-            File.WriteAllLines("C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\estensioneProgetto\\SSD2019\\SSD2019\\previsions\\GAPreq.dat", results.Select(x => x.ToString()));
+            File.WriteAllLines(gapReqPath, results.Select(x => (int)Math.Round(x)).Select(x => x.ToString()));
             return Ok(jarray);
         }
 
@@ -111,7 +103,7 @@ namespace SSD2019.Controllers
         [ActionName("GetForecastsByCustomer")]
         public IHttpActionResult GetForecastsByCustomer(string id)
         {
-            pythonScriptsPath = System.IO.Path.GetFullPath(pythonScriptsPath);//todo:check se non va
+            
             try
             {
                 if(!persistence.getCustomersList().Contains(id))

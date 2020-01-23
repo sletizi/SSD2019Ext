@@ -15,19 +15,15 @@ import matplotlib.pyplot as plt
 plt.rcParams.update({'figure.figsize':(6,4), 'figure.dpi':120})
 
 # ---------------------------- read from sqlite database
-def load_orders(customers):
-	
-    SQL = "SELECT time,quant FROM ordini WHERE customer IN ({})".format(customers)
-    
-    host = "137.204.72.73"
-    username = "studSSD"
-    password = "studSSD"
-    db = "studenti"
-    engine = pymssql.connect(host, username, password, db)						
+def load_orders(db, customers):
+	SQL = "SELECT time,quant FROM ordini WHERE customer IN ({})"\
+		.format(customers)
 
-    df_allorders = pd.read_sql_query(SQL, engine)
+	engine = create_engine('sqlite:///' + db)
 
-    return df_allorders
+	df_allorders = pd.read_sql(SQL, engine, index_col='time')
+
+	return df_allorders
 
 # ------------------------------ Accuracy metrics
 def forecast_accuracy(forecast, actual):
@@ -86,13 +82,7 @@ def load_stock_data(db, tickers, start_date, end_date):
 
 	return result
 
-#comunica con il db
-def load_orders(db, customers):
-    SQL = "SELECT * FROM ordini WHERE customer IN ({})".format(customers)
-    engine = create_engine('sqlite:///' + db)
-    df_allorders = pd.read_sql(SQL, engine, index_col='time')
-    return df_allorders
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 
 

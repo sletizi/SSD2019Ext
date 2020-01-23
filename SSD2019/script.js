@@ -1,5 +1,4 @@
-﻿
-//DOM MANIPULATION 
+﻿//DOM MANIPULATION 
 $(document).ready(function () {
 
     var ip = "localhost";
@@ -14,17 +13,10 @@ $(document).ready(function () {
         var text = $("#resultsTextArea").val();
         $("#resultsTextArea").val(text + "\n" + separator + "\n" + newResult);
     }
-    $body = $("body");
 
-
-
-
-    $(".modal").bind("ajaxSend", function () {
-        $body.addClass("loading");
-    }).bind("ajaxComplete", function () {
-        $body.removeClass("loading");
-    });
     var cust = null;
+
+
 
     //SERVER INTERACTION FUNCTIONS
     function readAll() {
@@ -34,8 +26,21 @@ $(document).ready(function () {
                 type: "GET",
                 contentType: "application/json",
                 data: "",
+                dataType : "json",
+                beforeSend: function (xhr) {
+                    $('#overlay').fadeIn(300);
+                },
+                complete: function (xhr, status) {
+                    setTimeout(function () {
+                        $('#overlay').fadeOut(300);
+                    }, 500);
+                },
                 success: function (result) {
-                    appendTextAreaResults(JSON.stringify(result));
+                    var prova = "";
+                    for (var order in result) {
+                        prova += result[order].customer + " quant: " + result[order].quant + "\n";
+                    }
+                    appendTextAreaResults(prova);
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");
@@ -49,8 +54,23 @@ $(document).ready(function () {
                 type: "GET",
                 contentType: "application/json",
                 data: "",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    $('#overlay').fadeIn(300);
+                },
+                complete: function (xhr, status) {
+                    setTimeout(function () {
+                        $('#overlay').fadeOut(300);
+                    }, 500);
+                },
                 success: function (result) {
-                    appendTextAreaResults(JSON.stringify(result));
+                    var prova = "";
+                    var totQuant = 0;
+                    for (var order in result) {
+                        totQuant += result[order].quant;
+                    }
+                    prova = result[order].customer + " total quant: " + totQuant + "\n";
+                    appendTextAreaResults(prova);
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");
@@ -64,6 +84,15 @@ $(document).ready(function () {
                 type: "DELETE",
                 contentType: "application/json",
                 data: "",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    $('#overlay').fadeIn(300);
+                },
+                complete: function (xhr, status) {
+                    setTimeout(function () {
+                        $('#overlay').fadeOut(300);
+                    }, 500);
+                },
                 success: function (result) {
                     appendTextAreaResults("Customer " + customer + " deleted.");
                 },
@@ -79,6 +108,15 @@ $(document).ready(function () {
                 type: "PUT",
                 contentType: "application/json",
                 data: "",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    $('#overlay').fadeIn(300);
+                },
+                complete: function (xhr, status) {
+                    setTimeout(function () {
+                        $('#overlay').fadeOut(300);
+                    }, 500);
+                },
                 success: function (result) {
                     appendTextAreaResults("Quant of customer " + customer + " resetted.")
                 },
@@ -94,6 +132,15 @@ $(document).ready(function () {
                 type: "GET",
                 contentType: "application/json",
                 data: "",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    $('#overlay').fadeIn(300);
+                },
+                complete: function (xhr, status) {
+                    setTimeout(function () {
+                        $('#overlay').fadeOut(300);
+                    }, 500);
+                },
                 success: function (result) {
                     $("#graphic").attr("src", "data:image/png;base64," + result);
                 },
@@ -109,6 +156,15 @@ $(document).ready(function () {
                 type: "GET",
                 contentType: "application/json",
                 data: "",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    $('#overlay').fadeIn(300);
+                },
+                complete: function (xhr, status) {
+                    setTimeout(function () {
+                        $('#overlay').fadeOut(300);
+                    }, 500);
+                },
                 success: function (result) {
                     $("#graphic").attr("src", "data:image/png;base64," + result);
                 },
@@ -124,15 +180,55 @@ $(document).ready(function () {
                 type: "GET",
                 contentType: "application/json",
                 data: "",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    $('#overlay').fadeIn(300);
+                },
+                complete: function (xhr, status) {
+                    setTimeout(function () {
+                        $('#overlay').fadeOut(300);
+                    }, 500);
+                },
                 success: function (result) {
-                    appendTextAreaResults(JSON.stringify(result))
+                    var prova = "";
+                    for (var order in result) {
+                        prova += result[order].customer + " :\n " + result[order].forecasts + "\n";
+                    }
+                    appendTextAreaResults(prova);
+ 
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");
                 }
             });
     }
+    function optimize(optimizeMethod) {
+        $.ajax(
+            {
+                url: protocol + "://" + ip + ":" + port + "/api/" + optimizeMethod,
+                type: "GET",
+                contentType: "application/json",
+                data: "",
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    $('#overlay').fadeIn(300);
+                },
+                complete: function (xhr, status) {
+                    setTimeout(function () {
+                        $('#overlay').fadeOut(300);
+                    }, 500);
+                },
+                success: function (result) {
+                    appendTextAreaResults(JSON.stringify(result));
+                },
+                error: function (xhr, status, p3, p4) {
+                    alert("Something went wrong");
+                }
+            });
+    }
+    
 
+    
     $('#getAll').click(function () {
         readAll();
     })
@@ -156,8 +252,7 @@ $(document).ready(function () {
         }
     })
     $('#optimize').click(function () {
-        var selectedMethod = getSelectedOptimizationMethod();
-        alert("You have selected - " + selectedMethod);
+        optimize(getSelectedOptimizationMethod());
     })
 
 

@@ -10,18 +10,29 @@ namespace SSD2019.Models
 {
     public class Persistence
     {
-        private string connectionString;
-        private string factory;
-        private string dbpath;
         private DbProviderFactory dbFactory;
+        private string dbPath = ConfigurationManager.AppSettings["projectPath"] + "\\App_Data\\ordiniMI2019.sqlite";
+        private string connectionString = ConfigurationManager.ConnectionStrings["SQLiteConn"].ConnectionString;
+        private string factory = ConfigurationManager.ConnectionStrings["SQLiteConn"].ProviderName;
+        private static Persistence instance = null;
 
-        public Persistence(string connectionString, string factory, string dbpath)
+        private Persistence()
         {
-            this.connectionString = connectionString;
-            this.factory = factory;
-            this.dbpath = dbpath;
+
+            this.connectionString = this.connectionString.Replace("DBFILE", dbPath);
             this.dbFactory = DbProviderFactories.GetFactory(factory);
 
+        }
+        public static Persistence Instance
+        {
+            get
+            {
+                if(instance == null)
+                {
+                    instance = new Persistence();
+                }
+                return instance;
+            }
         }
         public List<Order> getOrders()
         {
