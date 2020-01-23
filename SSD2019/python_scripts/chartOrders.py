@@ -14,8 +14,7 @@ from cycler import cycler #serve x fare i grafici di colori diversi generando un
 import warnings #serve x filtrare l'output con warning k non mi servono altrimenti lo dovrei fare da c#
 
 from sqlalchemy import create_engine
-import pandas as pd
-import pymssql
+
 import io, base64
 
 
@@ -47,24 +46,16 @@ def load_stock_data(db, tickers, start_date, end_date):
 	return result
 
 #comunica con il db
-def load_orders(customers):
+def load_orders(db, customers):
 
     SQL = "SELECT * FROM ordini WHERE customer IN ({})".format(customers)
-    
-    host = "137.204.72.73"
-    username = "studSSD"
-    password = "studSSD"
-    db = "studenti"
-    engine = pymssql.connect(host, username, password, db)						
-
-    #df_allorders = pd.read_sql_query(SQL, engine)
-    df_allorders = pd.read_sql(SQL, engine, index_col='id')
-
-    result = [] 
-
+    engine = create_engine('sqlite:///' + db) #capisce k è un accesso a sqlLite, con engine creo un collegamento con il db
+    df_allorders = pd.read_sql(SQL, engine, index_col='id') #istruzione per leggere ciò che c'è scritto in SQL tramite l'engine utilizzando l'indice della colonna id
+    result = [] #inizializzo la lista dei risultati
     for cust in customers.split(","):
         df_order = df_allorders.query("customer == " + cust)
         result.append(df_order)
+
     return result
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -104,9 +95,10 @@ plt.rc('axes', prop_cycle=(cycler('color', COLOR_MAP)))
 #db_path    = "C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\ordiniMI2018.sqlite"
 customers = sys.argv[2]
 #customers  =  "'cust4','cust12','cust13','cust50','cust29','cust11','cust20','cust22','cust1','cust6','cust30','cust46'"
+dbpath = sys.argv[3]
 
 # Get the orders from the database.
-dfs = load_orders(customers)
+dfs = load_orders(dbpath, customers)
 
 # Draw a line to the chart for every single customer.
 for df in dfs:

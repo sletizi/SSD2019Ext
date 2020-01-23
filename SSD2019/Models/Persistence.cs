@@ -5,25 +5,33 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Web;
 
 namespace SSD2019.Models
 {
     public class Persistence
     {
-        private string connectionString = ConfigurationManager.ConnectionStrings["RemoteSQLConn"].ConnectionString;
-        private string factory = ConfigurationManager.ConnectionStrings["RemoteSQLConn"].ProviderName;
+        private string connectionString;
+        private string factory;
+        private string dbpath;
+        private DbProviderFactory dbFactory;
 
+        public Persistence(string connectionString, string factory, string dbpath)
+        {
+            this.connectionString = connectionString;
+            this.factory = factory;
+            this.dbpath = dbpath;
+            this.dbFactory = DbProviderFactories.GetFactory(factory);
+
+        }
         public List<Order> getOrders()
         {
             List<Order> lstOrders = new List<Order>();
-            IDbConnection conn = new SqlConnection(connectionString);
-            using (conn)
+            using (DbConnection conn = dbFactory.CreateConnection())       
             {
-             
+                conn.ConnectionString = connectionString;
                 conn.Open();
                 IDbCommand com = conn.CreateCommand();
-                string queryText = "select id, customer, time, quant from ordini" /*order by quant"*/;
+                string queryText = "select id, customer, time, quant from ordini";
                 com.CommandText = queryText;
                 using (IDataReader reader = com.ExecuteReader())
                 {
@@ -34,18 +42,18 @@ namespace SSD2019.Models
                 }
                 
             }
-            return lstOrders;
+            return lstOrders.Where(order => order.customer != "default").ToList(); ;
         }
 
        
         public List<Order> getCustomerOrders(string custId)
         {
             List<Order> lstOrders = new List<Order>();
-            IDbConnection conn = new SqlConnection(connectionString);
-            using (conn)
+            using (DbConnection conn = dbFactory.CreateConnection())
             {
+                conn.ConnectionString = connectionString;
                 conn.Open();
-                string queryText = "select id, customer, time, quant from ordini where customer=@custId" /*order by quant"*/;
+                string queryText = "select id, customer, time, quant from ordini where customer=@custId";
                 IDbCommand com = PrepareParametrizedStringQuery(conn, queryText, DbType.String, custId);
                 using (IDataReader reader = com.ExecuteReader())
                 {
@@ -60,9 +68,9 @@ namespace SSD2019.Models
 
         public Order addCustomerOrder(Order order)
         {
-            IDbConnection conn = new SqlConnection(connectionString);
-            using (conn)
+            using (DbConnection conn = dbFactory.CreateConnection())
             {
+                conn.ConnectionString = connectionString;
                 conn.Open();
                 IDbCommand com = conn.CreateCommand();
                 string queryText = "insert into ordini ('id', 'customer', 'time', 'quant') values ('" + order.id + "','" + order.customer + "','" + order.time + "','" + order.quant + "')";
@@ -81,9 +89,9 @@ namespace SSD2019.Models
 
         public bool resetCustomerQuant(string custId)
         {
-            IDbConnection conn = new SqlConnection(connectionString);
-            using (conn)
+            using (DbConnection conn = dbFactory.CreateConnection())
             {
+                conn.ConnectionString = connectionString;
                 conn.Open();
                 string queryText = "update ordini set quant=0 where customer=@custId";
                 IDbCommand com = PrepareParametrizedStringQuery(conn, queryText, DbType.String, custId);
@@ -93,9 +101,9 @@ namespace SSD2019.Models
 
         public bool deleteCustomerOrders(string custId)
         {
-            IDbConnection conn = new SqlConnection(connectionString);
-            using (conn)
+            using (DbConnection conn = dbFactory.CreateConnection())
             {
+                conn.ConnectionString = connectionString;
                 conn.Open();
                 string queryText = "delete from ordini where customer=@custId";
                 IDbCommand com = PrepareParametrizedStringQuery(conn, queryText, DbType.String, custId);
@@ -106,9 +114,9 @@ namespace SSD2019.Models
         public List<String> getCustomersList()
         {
             List<String> lstCustomer = new List<String>();
-            IDbConnection conn = new SqlConnection(connectionString);
-            using (conn)
+            using (DbConnection conn = dbFactory.CreateConnection())
             {
+                conn.ConnectionString = connectionString;
                 conn.Open();
                 IDbCommand com = conn.CreateCommand();
                 string queryText = "select distinct customer from ordini";
@@ -121,7 +129,7 @@ namespace SSD2019.Models
                     }
                 }
             }
-            return lstCustomer;
+            return lstCustomer.Where(cust => cust != "default").ToList();
         }
 
 
@@ -148,9 +156,71 @@ namespace SSD2019.Models
         }
 
 
+        public void ReadGAPinstance(GAPclass G)
+        {
+            int i, j;
+            List<int> lstCap;
+            List<double> lstCosts;
+            using (DbConnection conn = dbFactory.CreateConnection())
+            {
+                conn.ConnectionString = connectionString;
+                conn.Open();
+                lstCap = getListFromQuery("SELECT cap from capacita", "cap").Select(d => Convert.ToInt32(d)).ToList();
+                G.m = lstCap.Count();
+                G.cap = new int[G.m];
+                for (i = 0; i < G.m; i++)
+                    G.cap[i] = lstCap[i];
 
+                lstCosts = getListFromQuery("SELECT cost from costi", "cost").ToList();
+                G.n = lstCosts.Count / G.m;
+                G.c = new double[G.m, G.n];
+                G.req = new int[G.n];
+                G.sol = new int[G.n];
+                G.solbest = new int[G.n];
+                G.zub = Double.MaxValue;
+                G.zlb = Double.MinValue;
+
+                for (i = 0; i < G.m; i++)
+                    for (j = 0; j < G.n; j++)
+                        G.c[i, j] = lstCosts[i * G.n + j];
+
+                for (j = 0; j < G.n; j++)
+                    G.req[j] = -1;          // placeholder
+            }
+
+
+        }
+        private List<double> getListFromQuery(string query, string selectField)
+        {
+            List<double> result = new List<double>();
+            using (DbConnection conn = dbFactory.CreateConnection())
+            {
+                try
+                {
+                    conn.ConnectionString = connectionString;
+                    conn.Open();
+                    DbCommand com = conn.CreateCommand();
+                    com.CommandText = query;
+                    DbDataReader reader = com.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        result.Add(Convert.ToDouble(reader[selectField]));
+                    }
+
+                    reader.Close();
+                    conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    return new List<double>();
+                }
+                finally
+                {
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                }
+                return result;
+            }
+        }
     }
-
-
 
 }

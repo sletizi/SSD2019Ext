@@ -17,13 +17,13 @@ namespace SSD2019.Models
         private string connectionString;
         private string factory;
         private string dbpath;
-       private DbProviderFactory dbFactory;
+        private DbProviderFactory dbFactory;
 
         public LocalPersistence()
         {
             connectionString = ConfigurationManager.ConnectionStrings["SQLiteConn"].ConnectionString;
             factory = ConfigurationManager.ConnectionStrings["SQLiteConn"].ProviderName;  
-            dbpath = ConfigurationManager.AppSettings["dbordiniFile"];
+            dbpath = ConfigurationManager.AppSettings["projectPath"]+"\\SQLite\\ordiniMI2019.sqlite";
             dbFactory = DbProviderFactories.GetFactory(factory);
         }
         public void ReadGAPinstance(GAPclass G)

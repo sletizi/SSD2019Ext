@@ -132,6 +132,7 @@
   <ItemGroup>
     <Content Include="manifest.json" />
     <None Include="packages.config" />
+    <Content Include="SQLite\ordiniMI2019.sqlite" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

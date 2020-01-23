@@ -51,8 +51,9 @@ def forecast_accuracy(forecast, actual):
 customers = sys.argv[2]
 #customers = "'cust1'"
 pklDirectory = sys.argv[3]
+dbpath = sys.argv[4]
 
-df = load_orders(customers)
+df = load_orders(dbpath, customers)
 
 # !pip3 install pyramid-arima
 import pmdarima.arima as pm
@@ -86,25 +87,11 @@ def load_stock_data(db, tickers, start_date, end_date):
 	return result
 
 #comunica con il db
-def load_orders(customers):
-
+def load_orders(db, customers):
     SQL = "SELECT * FROM ordini WHERE customer IN ({})".format(customers)
-    print(SQL)
-    host = "137.204.72.73"
-    username = "studSSD"
-    password = "studSSD"
-    db = "studenti"
-    engine = pymssql.connect(host, username, password, db)						
-
-    #df_allorders = pd.read_sql_query(SQL, engine)
-    df_allorders = pd.read_sql(SQL, engine, index_col='id')
-
-    result = [] 
-
-    for cust in customers.split(","):
-        df_order = df_allorders.query("customer == " + cust)
-        result.append(df_order)
-    return result
+    engine = create_engine('sqlite:///' + db)
+    df_allorders = pd.read_sql(SQL, engine, index_col='time')
+    return df_allorders
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 

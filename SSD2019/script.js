@@ -3,22 +3,39 @@
 $(document).ready(function () {
 
     var ip = "localhost";
+    var protocol = "http";
+    var port = "52436"; //44306
+    var separator = "\n\n\n--------------------------------------------------------------------\n\n\n";
     //UTILITY FUNCTIONS
     function getSelectedOptimizationMethod() {
         return $(".optimizationMethod").children("option:selected").text();
     }
+    function appendTextAreaResults(newResult) {
+        var text = $("#resultsTextArea").val();
+        $("#resultsTextArea").val(text + "\n" + separator + "\n" + newResult);
+    }
+    $body = $("body");
+
+
+
+
+    $(".modal").bind("ajaxSend", function () {
+        $body.addClass("loading");
+    }).bind("ajaxComplete", function () {
+        $body.removeClass("loading");
+    });
     var cust = null;
 
     //SERVER INTERACTION FUNCTIONS
     function readAll() {
         $.ajax(
             {
-                url: "https://"+ip+":44306/api/orders",
+                url: protocol+"://"+ip+":"+port+"/api/orders",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
                 success: function (result) {
-                    $("#resultsTextArea").val(JSON.stringify(result));
+                    appendTextAreaResults(JSON.stringify(result));
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");
@@ -28,13 +45,12 @@ $(document).ready(function () {
     function readCustomerOrders(customer) {
         $.ajax(
             {
-                url: "https://" + ip +":44306/api/customers/"+customer+"/orders",
+                url: protocol + "://" + ip + ":" + port +"/api/customers/"+customer+"/orders",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
                 success: function (result) {
-                    alert(JSON.stringify(result));
-                    $("#resultsTextArea").val(JSON.stringify(result));
+                    appendTextAreaResults(JSON.stringify(result));
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");
@@ -44,12 +60,12 @@ $(document).ready(function () {
     function deleteAllCustomerOrders(customer) {
         $.ajax(
             {
-                url: "https://" + ip +":44306/api/customers/" + customer + "/orders",
+                url: protocol + "://" + ip + ":" + port +"/api/customers/" + customer + "/orders",
                 type: "DELETE",
                 contentType: "application/json",
                 data: "",
                 success: function (result) {
-                    
+                    appendTextAreaResults("Customer " + customer + " deleted.");
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");
@@ -59,12 +75,12 @@ $(document).ready(function () {
     function resetCustomerOrdersQuant(customer) {
         $.ajax(
             {
-                url: "https://" + ip +":44306/api/customers/" + customer + "/orders",
+                url: protocol + "://" + ip + ":" + port +"/api/customers/" + customer + "/orders",
                 type: "PUT",
                 contentType: "application/json",
                 data: "",
                 success: function (result) {
-
+                    appendTextAreaResults("Quant of customer " + customer + " resetted.")
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");
@@ -74,12 +90,12 @@ $(document).ready(function () {
     function getAllOrdersChart() {
         $.ajax(
             {
-                url: "https://" + ip +":44306/api/ordersChart",
+                url: protocol + "://" + ip + ":" + port +"/api/ordersChart",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
                 success: function (result) {
-                    //get the bitmap
+                    $("#graphic").attr("src", "data:image/png;base64," + result);
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");
@@ -89,12 +105,12 @@ $(document).ready(function () {
     function forecastsSpecifiedCustomer(customer) {
         $.ajax(
             {
-                url: "https://" + ip +":44306/api/customers/"+customer+"/forecasts",
+                url: protocol + "://" + ip + ":" + port +"/api/customers/"+customer+"/forecasts",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
                 success: function (result) {
-                    //get the bitmap
+                    $("#graphic").attr("src", "data:image/png;base64," + result);
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");
@@ -104,12 +120,12 @@ $(document).ready(function () {
     function forecastsAll() {
         $.ajax(
             {
-                url: "https://" + ip +":44306/api/forecasts",
+                url: protocol + "://" + ip + ":" + port +"/api/forecasts",
                 type: "GET",
                 contentType: "application/json",
                 data: "",
                 success: function (result) {
-                    $("#resultsTextArea").val(JSON.stringify(result));
+                    appendTextAreaResults(JSON.stringify(result))
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");

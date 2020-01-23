@@ -10,26 +10,33 @@ using System.Web.Http.Cors;
 using SSD2019.Models;
 
 namespace SSD2019.Controllers
-{ 
+{
     [RoutePrefix("api")]
     public class OrdersController : ApiController
     {
-        private Persistence persistence = new Persistence();
+        private Persistence persistence;
 
-        string pythonPath;
-        string pythonScriptsPath;
-
-        PythonRunner python;
+        private string pythonPath;
+        private string pythonScriptsPath;
+        private string dbPath;
+        private string connectionString;
+        private string factory;
+        private PythonRunner python;
 
         public OrdersController()
         {
-            pythonScriptsPath = ConfigurationManager.AppSettings["pyScripts"];
+            pythonScriptsPath = ConfigurationManager.AppSettings["projectPath"]+"\\python_scripts";
             pythonPath = ConfigurationManager.AppSettings["pythonPath"];
             python = new PythonRunner(pythonPath, 20000);
+            dbPath = ConfigurationManager.AppSettings["projectPath"] + "\\SQLite\\ordiniMI2019.sqlite";
+            connectionString = ConfigurationManager.ConnectionStrings["SQLiteConn"].ConnectionString;
+            connectionString = connectionString.Replace("DBFILE", dbPath);
+            factory = ConfigurationManager.ConnectionStrings["SQLiteConn"].ProviderName;
+            persistence = new Persistence(connectionString, factory, dbPath);
         }
 
         [HttpGet]
-        [EnableCors(origins: "https://maluffa.github.io", headers:"*", methods:"*")]
+        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         [Route("orders")]
         [ActionName("GetAllOrders")]
         public IHttpActionResult GetAllOrders()
@@ -41,7 +48,7 @@ namespace SSD2019.Controllers
             }
             catch (Exception e)
             {
-               return InternalServerError();
+                return InternalServerError();
             }
         }
 
@@ -81,7 +88,7 @@ namespace SSD2019.Controllers
             {
                 return InternalServerError();
             }
-            
+
         }
 
         [HttpPut]
@@ -100,10 +107,10 @@ namespace SSD2019.Controllers
             {
                 return InternalServerError();
             }
-           
+
         }
 
-        [HttpDelete ]
+        [HttpDelete]
         [Route("customers/{id}/orders")]
         [ActionName("DeleteAllCustomerOrders")]
         [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
@@ -128,21 +135,24 @@ namespace SSD2019.Controllers
         [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
         public IHttpActionResult GetAllOrdersChart()
         {
-            pythonScriptsPath = System.IO.Path.GetFullPath(pythonScriptsPath);
             try
             {
                 string customersString = getCustomersStringList(persistence.getCustomersList());
-                string bitmapString=  python.getImage(pythonScriptsPath,
+                string bitmapString = python.getImage(pythonScriptsPath,
                                     "chartOrders.py",
                                      pythonScriptsPath,
-
-                                     customersString);
-                return Content(HttpStatusCode.OK, bitmapString);
+                                     customersString,
+                                     dbPath);
+                return Content(HttpStatusCode.OK, getBitmapStringFromPythonResult(bitmapString));
             }
             catch (Exception e)
             {
                 return InternalServerError();
             }
+        }
+        public string getBitmapStringFromPythonResult(string bitmap)
+        {
+            return bitmap.Substring(2, bitmap.Length - 3);
         }
         [HttpGet]
         [Route("customers")]
