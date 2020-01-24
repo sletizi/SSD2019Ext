@@ -1,7 +1,7 @@
 ﻿//DOM MANIPULATION 
 $(document).ready(function () {
 
-    var ip = "127.0.0.1";
+    var ip = "192.168.1.51";
     var protocol = "https"; //http
     var port = "44306"; //52436
     var separator = "\n\n\n--------------------------------------------------------------------\n\n\n";
