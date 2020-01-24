@@ -1,9 +1,9 @@
 ﻿//DOM MANIPULATION 
 $(document).ready(function () {
 
-    var ip = "localhost";
-    var protocol = "http";
-    var port = "52436"; //44306
+    var ip = "127.0.0.1";
+    var protocol = "https"; //http
+    var port = "44306"; //52436
     var separator = "\n\n\n--------------------------------------------------------------------\n\n\n";
     //UTILITY FUNCTIONS
     function getSelectedOptimizationMethod() {
