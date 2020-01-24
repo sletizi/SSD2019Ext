@@ -2,8 +2,8 @@
 $(document).ready(function () {
 
     var ip = "localhost";
-    var protocol = "http"; //https
-    var port = "52436"; // 44385
+    var protocol = "https"; //https
+    var port = "44385"; //  52436
     var separator = "\n\n\n--------------------------------------------------------------------\n\n\n";
     //UTILITY FUNCTIONS
     function getSelectedOptimizationMethod() {
