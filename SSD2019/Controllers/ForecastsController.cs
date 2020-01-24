@@ -12,7 +12,8 @@ using SSD2019.Models;
 
 
 //TODO check ip in scripts if we can set 127.0.0.1
-//TODO change policy to save results in gapReq.dat ?, anyway save the path in web.config
+//TODO check optimization results
+//TODO check if it works on GitHUB Pages
 
 namespace SSD2019.Controllers
 {

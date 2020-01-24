@@ -12,6 +12,7 @@ $(document).ready(function () {
     function appendTextAreaResults(newResult) {
         var text = $("#resultsTextArea").val();
         $("#resultsTextArea").val(text + "\n" + separator + "\n" + newResult);
+        $('#resultsTextArea').scrollTop($('#resultsTextArea')[0].scrollHeight);
     }
 
     var cust = null;
