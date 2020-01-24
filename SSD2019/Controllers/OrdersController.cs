@@ -12,6 +12,7 @@ using SSD2019.Models;
 namespace SSD2019.Controllers
 {
     [RoutePrefix("api")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class OrdersController : ApiController
     {
         private Persistence persistence;
@@ -31,7 +32,7 @@ namespace SSD2019.Controllers
         }
 
         [HttpGet]
-        [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
         [Route("orders")]
         [ActionName("GetAllOrders")]
         public IHttpActionResult GetAllOrders()

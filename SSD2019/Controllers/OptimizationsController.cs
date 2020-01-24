@@ -12,7 +12,6 @@ using System.Web.Http.Cors;
 namespace SSD2019.Controllers
 {
     [RoutePrefix("api")]
-    [EnableCors(origins: "https://maluffa.github.io", headers: "*", methods: "*")]
     public class OptimizationsController : ApiController
     {
         private GAPclass GAP = new GAPclass();

@@ -12,11 +12,11 @@ using SSD2019.Models;
 
 
 //TODO check ip in scripts if we can set 127.0.0.1
-//TODO check optimization results
 //TODO check if it works on GitHUB Pages
 
 namespace SSD2019.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     [RoutePrefix("api")]
     public class ForecastsController : ApiController
     {

@@ -1,9 +1,9 @@
 ﻿//DOM MANIPULATION 
 $(document).ready(function () {
 
-    var ip = "127.0.0.1";
-    var protocol = "https"; //http
-    var port = "44306"; //52436
+    var ip = "localhost";
+    var protocol = "http"; //https
+    var port = "52436"; // 44385
     var separator = "\n\n\n--------------------------------------------------------------------\n\n\n";
     //UTILITY FUNCTIONS
     function getSelectedOptimizationMethod() {
@@ -220,7 +220,7 @@ $(document).ready(function () {
                     }, 500);
                 },
                 success: function (result) {
-                    appendTextAreaResults(JSON.stringify(result));
+                    appendTextAreaResults(optimizeMethod + ": "+JSON.stringify(result));
                 },
                 error: function (xhr, status, p3, p4) {
                     alert("Something went wrong");

@@ -72,6 +72,7 @@ namespace SSD2019.Models
             double[] dist = new double[m];
             Array.Copy(cap, capres, cap.Length);
             z = 0;
+            zub = simpleConstruct();
             for (j = 0; j < n; j++)
             {
                 capres[sol[j]] -= req[j];
@@ -103,7 +104,7 @@ namespace SSD2019.Models
             int[] capres = new int[cap.Length];
             int i, j, isol, imax, jmax, iter;
             double z, deltaMax;
-
+            z = simpleConstruct();
             Array.Copy(cap, capres, cap.Length);
             for (j = 0; j < n; j++)
             {
@@ -118,7 +119,6 @@ namespace SSD2019.Models
                     TL[i, j] = int.MinValue;
                 }
             }
-            Trace.WriteLine("Starting Tabu Search");
         l1: deltaMax = imax = jmax = int.MinValue;
             iter++;
             for (j = 0; j < n; j++)
@@ -145,18 +145,11 @@ namespace SSD2019.Models
                 zub = z;
             }
             TL[imax, jmax] = iter;
-            if (iter % 100 == 0)
-            {
-                Trace.WriteLine("Tabu Search z = " + z + " iter = " + iter + " deltaMax = " + deltaMax);
-            }
             if (iter < maxIter)
             {
                 goto l1;
             }
-            else
-            {
-                Trace.WriteLine("Tabu search ended ");
-            }
+            
 
             double zCheck = 0;
             for (j = 0; j < n; j++)
