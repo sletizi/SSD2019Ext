@@ -1,7 +1,7 @@
 ﻿//DOM MANIPULATION 
 $(document).ready(function () {
 
-    var ip = "192.168.1.101"
+    var ip = "10.211.55.4"
     var protocol = "https"; //https
     var port = "44385"//52436
     var separator = "\n\n\n--------------------------------------------------------------------\n\n\n";
@@ -262,19 +262,4 @@ $(document).ready(function () {
     $('input').keyup(function () {
         if ($(this).val().length > 0) {
             cust = $(this).val();
-            $('.customerButton').removeClass('buttonNoHover');
-            $('.customerButton').addClass('buttonHover');
-            $('.customerButton').prop("disabled", false);
-            $('#addOrderForCustomer').prop("disabled", true);
-            $('#addOrderForCustomer').removeClass('buttonHover');
-            $('#addOrderForCustomer').addClass('buttonNoHover');
-
-        } else {
-            cust = null;
-            $('.customerButton').removeClass('buttonHover');
-            $('.customerButton').addClass('buttonNoHover');
-            $('.customerButton').prop("disabled", true);
-        }
-    });
-
-});
+            
