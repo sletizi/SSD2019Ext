@@ -3,8 +3,9 @@ $(document).ready(function () {
 
     var ip = "10.211.55.4"
     var protocol = "http"; //https
-    var port = "52436"//44385
+    var port = "44385"//52436
     var separator = "\n\n\n--------------------------------------------------------------------\n\n\n";
+
     //UTILITY FUNCTIONS
     function getSelectedOptimizationMethod() {
         return $(".optimizationMethod").children("option:selected").text();
