@@ -2,7 +2,7 @@
 $(document).ready(function () {
 
     var ip = "192.168.1.101"
-    var protocol = "http"; //https
+    var protocol = "https"; //https
     var port = "44385"//52436
     var separator = "\n\n\n--------------------------------------------------------------------\n\n\n";
 
