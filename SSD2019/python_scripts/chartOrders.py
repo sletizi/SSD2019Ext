@@ -3,7 +3,8 @@
 import sys #usata per passare parametri
 import os
 local_path = sys.argv[1] #nell'array di argv ci saranno i parametri
-#local_path = "C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\estensioneProgetto\\SSD2019\\SSD2019\\python_scripts" 
+#local_path = "C:\\Users\\simoneletizi\\Desktop\\SSD2019WEB\\SSD2019\\SSD2019\\python_scripts" 
+
 os.chdir(local_path) 
 
 
@@ -92,7 +93,7 @@ style.use('ggplot')
 plt.figure(figsize=(7, 5))
 plt.rc('axes', prop_cycle=(cycler('color', COLOR_MAP)))
 
-#db_path    = "C:\\Users\\Mark Studio\\Desktop\\Universita\\Magistrale\\SsD\\ordiniMI2018.sqlite"
+#dbpath = "C:\\Users\\simoneletizi\\Desktop\\SSD2019WEB\\SSD2019\\SSD2019\\App_Data\\ordiniMI2019.sqlite"
 customers = sys.argv[2]
 #customers  =  "'cust4','cust12','cust13','cust50','cust29','cust11','cust20','cust22','cust1','cust6','cust30','cust46'"
 dbpath = sys.argv[3]
@@ -112,5 +113,3 @@ plt.ylabel('Quant')
 # Finally, print the chart as base64 string to the console.
 print_figure(plt.gcf()) #genera una stringa che contiene la codifica binaria del grafico, è ciò k viene 
 #esportato e letto da c# di cui poi farà il rendering
-
-

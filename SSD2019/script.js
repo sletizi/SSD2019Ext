@@ -1,9 +1,9 @@
 ﻿//DOM MANIPULATION 
 $(document).ready(function () {
 
-    var ip = "localhost";
-    var protocol = "https"; //https
-    var port = "44385"; //  52436
+    var ip = "10.211.55.4"
+    var protocol = "http"; //https
+    var port = "52436"//44385
     var separator = "\n\n\n--------------------------------------------------------------------\n\n\n";
     //UTILITY FUNCTIONS
     function getSelectedOptimizationMethod() {
@@ -27,7 +27,7 @@ $(document).ready(function () {
                 type: "GET",
                 contentType: "application/json",
                 data: "",
-                dataType : "json",
+                dataType: "json",
                 beforeSend: function (xhr) {
                     $('#overlay').fadeIn(300);
                 },

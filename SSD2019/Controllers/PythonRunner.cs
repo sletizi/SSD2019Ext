@@ -243,7 +243,7 @@ namespace SSD2019.Controllers
                 if (sw.BaseStream.CanWrite)
                 {
                     sw.WriteLine("echo off");//non ci fa vedere il prompt
-                    sw.WriteLine("conda activate tensorflow_cpu"); //mettere anaconda come variabile d'ambiente, devo mettere tensorflow_cpu non cplex
+                    sw.WriteLine("conda activate tensorflow"); //mettere anaconda come variabile d'ambiente, devo mettere tensorflow_cpu non cplex
                     sw.WriteLine($"call python {strCommand}"); //fa eseguire lo script python e in output dà la codifica binaria della bitmap
                     sw.WriteLine("exit");
                 }
